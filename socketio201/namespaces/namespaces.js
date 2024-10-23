@@ -10,7 +10,7 @@ const expressServer = app.listen(8001);
 const io = socketio(expressServer)
 
 // io = server in the docs
-io.of("/").on('connection',(socket)=>{
+io.on("/").on('connection',(socket)=>{
     console.log(socket.id,"has connected")
     //in ws we use "send" method, and it socket.io we use the "emit" method
     // socket.emit('messageFromServer',{data:"Welcome to the socket server!"})

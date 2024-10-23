@@ -2,16 +2,18 @@ const express = require('express');
 const app = express();
 const socketio = require('socket.io')
 
+// serves the files in the public folder
 app.use(express.static(__dirname + '/public'));
 
-const expressServer = app.listen(9000);
+// this handles https traffic
+const expressServer = app.listen(3000);
+
+// this handles websocket traffic
 const io = socketio(expressServer)
 
-io.on("/").on('connection',(socket)=>{
+// listen for connection on entire socket server
+io.on('connection',(socket)=>{
     console.log(socket.id,"has connected")
-    socket.on('newMessageToServer',(dataFromClient)=>{
-        console.log("Data:",dataFromClient);
-        io.emit('newMessageToClients',{text:dataFromClient.text});
-    })
+    socket.emit('welcome', 'welcome to the socket server');
 })
 

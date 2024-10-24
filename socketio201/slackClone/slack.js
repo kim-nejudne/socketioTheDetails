@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const socketio = require('socket.io')
 
+const namespaces = require('./data/namespaces');
+
 // serves the files in the public folder
 app.use(express.static(__dirname + '/public'));
 
@@ -16,10 +18,18 @@ const io = socketio(expressServer)
 io.on('connection', (socket)=>{
     console.log(socket.id,"has connected")
     socket.emit('welcome', 'welcome to the socket server');
+
+    // send nsList data to the client
+    // this sends the namespaces array to all clients
+    socket.emit('nsList', namespaces);
     
     socket.on('clientConnect', (data)=>{
         console.log('client has connected');
         console.log('data', data);
+    });
+ 
+    socket.on('clientLogin', (data)=>{
+        console.log('login data', data);
     });
 })
 

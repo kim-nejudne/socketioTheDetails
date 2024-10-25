@@ -1,3 +1,6 @@
+const Namespace = require('../classes/Namespace');
+const Room = require('../classes/Room');
+
 /**
  * what is this file doing?
  * in here, I have the namespaces objects that I will export to the slack.js file
@@ -5,25 +8,109 @@
  * the slack.js file will emit the nsList event to the client
  */
 
-const wikiNs = {
-    name: '/wiki',
-    image: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/103px-Wikipedia-logo-v2.svg.png',
-};
+// wikipedia related things
+const WikipediaNs = new Namespace({
+  id: 0,
+  name: 'Wikipedia',
+  img: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Wikipedia-logo-v2.svg/103px-Wikipedia-logo-v2.svg.png',
+  endpoint: '/wiki',
+});
 
-const mozillaNs = {
-    name: '/mozilla',
-    image: 'https://www.mozilla.org/media/img/logos/firefox/logo-quantum.9c5e96634f92.png',
-};
+const wikiHistory = new Room({
+  roomId: 0,
+  roomTitle: 'Wikipedia History',
+  namespaceId: 0,
+  privateRoom: false,
+});
 
-const linuxNs = {
-    name: '/linux',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png',
-};
+const wikiProgramming = new Room({
+  roomId: 1,
+  roomTitle: 'Programming',
+  namespaceId: 0,
+  privateRoom: false,
+});
+
+const wikiScience = new Room({
+  roomId: 2,
+  roomTitle: 'Science',
+  namespaceId: 0,
+  privateRoom: false,
+});
+
+WikipediaNs.addRoom(wikiHistory);
+WikipediaNs.addRoom(wikiProgramming);
+WikipediaNs.addRoom(wikiScience);
+
+// Mozilla related things
+const MozillaNs = new Namespace({
+  id: 1,
+  name: 'Mozilla',
+  img: 'https://www.mozilla.org/media/img/logos/firefox/logo-quantum.9c5e96634f92.png',
+  endpoint: '/mozilla',
+});
+
+const mozillaHistory = new Room({
+  roomId: 0,
+  roomTitle: 'Mozilla History',
+  namespaceId: 1,
+  privateRoom: false,
+});
+
+const mozillaAddons = new Room({
+  roomId: 1,
+  roomTitle: 'Add-ons',
+  namespaceId: 1,
+  privateRoom: false,
+});
+
+const mozillaDevelopers = new Room({
+  roomId: 2,
+  roomTitle: 'Developers',
+  namespaceId: 1,
+  privateRoom: false,
+});
+
+MozillaNs.addRoom(mozillaHistory);
+MozillaNs.addRoom(mozillaAddons);
+MozillaNs.addRoom(mozillaDevelopers);
+
+// Linux related things
+const LinuxNs = new Namespace({
+  id: 2,
+  name: 'Linux',
+  img: 'https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png',
+  endpoint: '/linux',
+});
+
+const linuxHistory = new Room({
+  roomId: 0,
+  roomTitle: 'Linux History',
+  namespaceId: 2,
+  privateRoom: false,
+});
+
+const linuxDistributions = new Room({
+  roomId: 1,
+  roomTitle: 'Distributions',
+  namespaceId: 2,
+  privateRoom: false,
+});
+
+const linuxDevelopers = new Room({
+  roomId: 2,
+  roomTitle: 'Developers',
+  namespaceId: 2,
+  privateRoom: false,
+});
+
+LinuxNs.addRoom(linuxHistory);
+LinuxNs.addRoom(linuxDistributions);
+LinuxNs.addRoom(linuxDevelopers);
 
 const namespaces = [
-    wikiNs,
-    mozillaNs,
-    linuxNs,
+  WikipediaNs,
+  MozillaNs,
+  LinuxNs,
 ];
 
 module.exports = namespaces;

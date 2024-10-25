@@ -1,4 +1,6 @@
-const username = prompt("What is your username?");
+// const username = prompt("What is your username?");
+
+const username = "kim";
 
 const socket = io('http://localhost:3000');
 
@@ -27,7 +29,7 @@ socket.on('nsList', (nsData) => {
     // when client receives nsList data from server,
     // render the nsList data to the DOM
     const namespacesDiv = document.getElementById('namespaces');
-    nsData.forEach(({ name, image }) => {
-        namespacesDiv.innerHTML += `<div class="namespace" ns="${name}"><img src="${image}" /></div>`;
+    nsData.forEach(({ endpoint, img }) => {
+        namespacesDiv.innerHTML += `<div class="namespace" ns="${endpoint}"><img src="${img}" /></div>`;
     });
 });

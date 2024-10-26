@@ -8,4 +8,6 @@ const joinNs = (element, nsData) => {
   rooms.forEach((room) => {
     roomList.innerHTML += `<li><span class="glyphicon glyphicon-lock"></span>${room.roomTitle}</li>`;
   });
+
+  localStorage.setItem('lastNs', nsEndpoint);
 };

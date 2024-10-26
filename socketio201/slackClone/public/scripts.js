@@ -24,14 +24,16 @@ socket.on("rules", (data) => {
 
 // listen for the nsList event from the server
 socket.on("nsList", (nsData) => {
-  console.log("nsData", nsData);
-
   // when client receives nsList data from server,
   // render the nsList data to the DOM
   const namespacesDiv = document.getElementById("namespaces");
+  namespacesDiv.innerHTML = '';
   nsData.forEach(({ endpoint, img }) => {
     namespacesDiv.innerHTML += `<div class="namespace" ns="${endpoint}"><img src="${img}" /></div>`;
   });
+
+  const lastNs = localStorage.getItem('lastNs');
+  const lastNsId = nsData.find((e) => e.endpoint === lastNs).id;
 
   const namespaces = document.getElementsByClassName("namespace");
 
@@ -42,5 +44,5 @@ socket.on("nsList", (nsData) => {
     });
   });
 
-  joinNs(namespaces[0], nsData);
+  joinNs(namespaces[lastNsId] || namespaces[0], nsData);
 });

@@ -33,25 +33,14 @@ socket.on("nsList", (nsData) => {
     namespacesDiv.innerHTML += `<div class="namespace" ns="${endpoint}"><img src="${img}" /></div>`;
   });
 
-  Array.from(document.getElementsByClassName("namespace")).forEach(
-    (nsElement) => {
-      const roomList = document.querySelector(".room-list");
+  const namespaces = document.getElementsByClassName("namespace");
 
-      const nsEndpoint = nsElement.getAttribute("ns");
+  Array.from(namespaces).forEach((nsElement) => {
+    nsElement.addEventListener("click", (event) => {
+      event.preventDefault();
+      joinNs(nsElement, nsData);
+    });
+  });
 
-      console.log("nsEndpoint", nsEndpoint);
-
-      nsElement.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        const clickedNs = nsData.find((e) => e.endpoint === nsEndpoint);
-        const rooms = clickedNs.rooms;
-
-        roomList.innerHTML = "";
-        rooms.forEach((room) => {
-          roomList.innerHTML += `<li><span class="glyphicon glyphicon-lock"></span>${room.roomTitle}</li>`;
-        });
-      });
-    }
-  );
+  joinNs(namespaces[0], nsData);
 });

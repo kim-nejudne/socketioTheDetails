@@ -5,11 +5,11 @@ class Namespace {
     this.img = img;
     this.endpoint = endpoint;
     this.rooms = [];
-  };
+  }
 
   addRoom(roomObj) {
     this.rooms.push(roomObj);
   }
-};
+}
 
 module.exports = Namespace;

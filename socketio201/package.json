@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./slackClone/slack.js",
+    "dev:slack": "nodemon ./slackClone/slack.js",
+    "dev:namespaces": "nodemon ./namespaces/namespaces.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

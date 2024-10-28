@@ -10,7 +10,7 @@ const expressServer = app.listen(8001);
 const io = socketio(expressServer)
 
 // io = server in the docs
-io.on("/").on('connection',(socket)=>{
+io.of("/").on('connection',(socket)=>{
     console.log(socket.id,"has connected")
     //in ws we use "send" method, and it socket.io we use the "emit" method
     // socket.emit('messageFromServer',{data:"Welcome to the socket server!"})
@@ -19,3 +19,8 @@ io.on("/").on('connection',(socket)=>{
         io.emit('newMessageToClients',{text:dataFromClient.text});
     })
 })
+
+io.of("/admin").on('connection',(socket)=>{
+    console.log("Someone connected to the admin namespace!")
+    io.of("/admin").emit('admin-welcome',"Welcome to the admin channel, INFIDELS!")
+});

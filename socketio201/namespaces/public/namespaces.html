@@ -42,8 +42,12 @@
 
 <script>
 
+    // over here, we have two sockets
+    // if the user join the main ns, they will be able to send messages to the main ns
+    // if the user join the admin ns, they will be able to send messages to the admin ns
     const socket = io('http://localhost:8001');
     const adminSocket = io('http://localhost:8001/admin');
+
     socket.on('connect',()=>{
         //do connect type stuff
         console.log("Successfully joined the main ns");
@@ -72,6 +76,10 @@
 
     adminSocket.on('welcomeToChatRoom',()=>{
         console.log("Admin chat room fired!")
+    })
+
+    adminSocket.on('admin-welcome', (dataFromServer)=>{
+        console.log(dataFromServer)
     })
 
     document.querySelector('#message-form').addEventListener('submit',(event)=>{

@@ -57,6 +57,10 @@
         console.log("Welcome to the main chat room")
     })
 
+    adminSocket.on('adminChatWelcome',(dataFromServer)=>{
+        console.log(dataFromServer)
+    })
+
     socket.on('messageFromServer',(dataFromServer)=>{
         console.log(dataFromServer)
     })
@@ -68,6 +72,10 @@
     
     socket.on('newMessageToClients',(newMessage)=>{
         document.querySelector('#messages').innerHTML += `<li>${newMessage.text}</li>`
+    })
+
+    socket.on('chatRoomWelcome',(dataFromServer)=>{
+        console.log(dataFromServer)
     })
     
     adminSocket.on('connect',()=>{

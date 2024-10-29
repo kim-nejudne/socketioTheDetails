@@ -3,23 +3,16 @@
 const username = "kim";
 
 const socket = io("http://localhost:3000");
+// const wikiSocket = io("http://localhost:3000/wiki");
+// const mozillaSocket = io("http://localhost:3000/mozilla");
+// const linuxSocket = io("http://localhost:3000/linux");
 
 // on the client, we say socket.on('connect') to listen for a connection
 socket.on("connect", () => {
-  console.log("Connected!");
-
   // this line emits an event to the server
-  socket.emit("clientConnect", { message: "I am connected", id: socket.id });
+  socket.emit("clientConnect", { message: `${socket.id} has connected` });
 
   socket.emit("clientLogin", { username });
-});
-
-socket.on("welcome", (data) => {
-  console.log("welcome data", data);
-});
-
-socket.on("rules", (data) => {
-  console.log("rules data", data);
 });
 
 // listen for the nsList event from the server
@@ -30,6 +23,9 @@ socket.on("nsList", (nsData) => {
   namespacesDiv.innerHTML = '';
   nsData.forEach(({ endpoint, img }) => {
     namespacesDiv.innerHTML += `<div class="namespace" ns="${endpoint}"><img src="${img}" /></div>`;
+
+    // connect to each namespace endpoint
+    io(`http://localhost:3000${endpoint}`);
   });
 
   const lastNs = localStorage.getItem('lastNs');

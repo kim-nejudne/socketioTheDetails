@@ -3,6 +3,7 @@ const app = express();
 const socketio = require("socket.io");
 
 const namespaces = require("./data/namespaces");
+const Room = require("./classes/Room");
 
 // serves the files in the public folder
 app.use(express.static(__dirname + "/public"));
@@ -12,6 +13,21 @@ const expressServer = app.listen(3000);
 
 // this handles websocket traffic
 const io = socketio(expressServer);
+
+app.get("/updateNs", (req, res) => {
+  const newRoom = new Room({
+    roomId: 3,
+    roomTitle: "Added Room",
+    namespaceId: 0,
+    privateRoom: false,
+  });
+
+  namespaces[0].addRoom(newRoom);
+
+  io.emit("nsRoomsLoad", namespaces[0].rooms);
+
+  res.send(namespaces[0]);
+});
 
 // listen for connection on entire socket server
 // on the server, we say io.on('connection') to listen for a connection

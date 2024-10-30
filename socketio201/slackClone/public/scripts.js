@@ -15,6 +15,10 @@ socket.on("connect", () => {
   socket.emit("clientLogin", { username });
 });
 
+socket.on("nsRoomsLoad", (rooms) => {
+  console.log('rooms', rooms);
+});
+
 // listen for the nsList event from the server
 socket.on("nsList", (nsData) => {
   // when client receives nsList data from server,

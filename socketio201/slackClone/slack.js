@@ -24,7 +24,7 @@ app.get("/updateNs", (req, res) => {
 
   namespaces[0].addRoom(newRoom);
 
-  io.emit("nsRoomsLoad", namespaces[0].rooms);
+  io.of(namespaces[0].endpoint).emit("nsRoomsLoad", namespaces[0].rooms);
 
   res.send(namespaces[0]);
 });

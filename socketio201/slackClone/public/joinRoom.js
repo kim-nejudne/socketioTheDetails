@@ -1,6 +1,6 @@
 const joinRoom = (roomTitle, nsId) => {
-  console.log("roomTitle", roomTitle);
-  console.log("nsId", nsId);
-
-  nameSpaceSockets[nsId].emit("joinRoom", { roomTitle });
+  nameSpaceSockets[nsId].emit("joinRoom", { roomTitle }, (ackRes) => {
+    document.querySelector(".curr-room-num-users").innerHTML = `${ackRes.userCount} <span class="fa-solid fa-user"></span>`;
+    document.querySelector(".curr-room-text").innerText = roomTitle;
+  });
 }

@@ -34,7 +34,7 @@ const wikiScience = new Room({
   roomId: 2,
   roomTitle: "Science",
   namespaceId: 0,
-  privateRoom: false,
+  privateRoom: true,
 });
 
 WikipediaNs.addRoom(wikiHistory);

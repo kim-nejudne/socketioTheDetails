@@ -48,8 +48,25 @@ namespaces.forEach((namespace) => {
 
   // over here, we're just console logging the connection for each namespace
   io.of(nsEndpoint).on('connection', (nsSocket) => {
-    nsSocket.on("joinRoom", ({ roomTitle }) => {
+    nsSocket.on("joinRoom", async (data, ackCallback) => {
+      const { roomTitle } = data;
+
+      // leave all rooms before joining
+      nsSocket.rooms.forEach((room, i) => {
+        if (i !== 0) {
+          nsSocket.leave(room);
+        }
+      });
+
       nsSocket.join(roomTitle);
+
+      const socketCount = await io.of(nsEndpoint).in(roomTitle).fetchSockets();
+
+      ackCallback({
+        status: "ok",
+        message: `You have joined ${roomTitle}`,
+        userCount: socketCount.length,
+      });
     });
   });
 });

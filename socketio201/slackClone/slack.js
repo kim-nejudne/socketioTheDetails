@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
   socket.emit("welcome", "welcome to the socket server");
 
   socket.on("clientConnect", (data) => {
-    console.log(data);
+    // console.log(data);
   });
 
   // send nsList data to the client
@@ -48,6 +48,8 @@ namespaces.forEach((namespace) => {
 
   // over here, we're just console logging the connection for each namespace
   io.of(nsEndpoint).on('connection', (nsSocket) => {
-    console.log(`${nsSocket.id} has joined ${nsEndpoint}`);
+    nsSocket.on("joinRoom", ({ roomTitle }) => {
+      nsSocket.join(roomTitle);
+    });
   });
 });

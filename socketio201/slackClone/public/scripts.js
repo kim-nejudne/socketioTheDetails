@@ -55,7 +55,7 @@ socket.on("nsList", (nsData) => {
   });
 
   const lastNs = localStorage.getItem("lastNs");
-  const lastNsId = nsData.find((e) => e.endpoint === lastNs).id;
+  const lastNsId = lastNs ? nsData.find((e) => e.endpoint === lastNs).id : 0;
 
   const namespaces = document.getElementsByClassName("namespace");
 

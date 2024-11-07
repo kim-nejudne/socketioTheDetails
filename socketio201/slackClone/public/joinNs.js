@@ -5,6 +5,9 @@ const joinNs = (element, nsData) => {
   const rooms = clickedNs.rooms;
 
   roomList.innerHTML = "";
+
+  joinRoom(rooms[0].roomTitle, clickedNs.id);
+
   rooms.forEach(({ namespaceId, privateRoom, roomTitle}) => {
     roomList.innerHTML += `<li class="room" nsId="${namespaceId}"><span class="fa-solid fa-${privateRoom ? 'lock' : 'globe'}"></span>${roomTitle}</li>`;
   });

@@ -48,7 +48,7 @@ namespaces.forEach((namespace) => {
 
   // over here, we're just console logging the connection for each namespace
   io.of(nsEndpoint).on('connection', (nsSocket) => {
-    nsSocket.on("joinRoom", async (data, ackCallback) => {
+    nsSocket.on("joinRoom", async (data, callback) => {
       const { roomTitle } = data;
 
       // leave all rooms before joining
@@ -62,7 +62,7 @@ namespaces.forEach((namespace) => {
 
       const socketCount = await io.of(nsEndpoint).in(roomTitle).fetchSockets();
 
-      ackCallback({
+      callback({
         status: "ok",
         message: `You have joined ${roomTitle}`,
         userCount: socketCount.length,

@@ -5,13 +5,10 @@ const socketio = require("socket.io");
 const namespaces = require("./data/namespaces");
 const Room = require("./classes/Room");
 
-// serves the files in the public folder
 app.use(express.static(__dirname + "/public"));
 
-// this handles https traffic
 const expressServer = app.listen(3000);
 
-// this handles websocket traffic
 const io = socketio(expressServer);
 
 app.get("/updateNs", (req, res) => {
@@ -29,24 +26,13 @@ app.get("/updateNs", (req, res) => {
   res.send(namespaces[0]);
 });
 
-// listen for connection on entire socket server
-// on the server, we say io.on('connection') to listen for a connection
 io.on("connection", (socket) => {
-  socket.emit("welcome", "welcome to the socket server");
-
-  socket.on("clientConnect", (data) => {
-    // console.log(data);
-  });
-
-  // send nsList data to the client
-  // this sends the namespaces array to all clients
   socket.emit("nsList", namespaces);
 });
 
 namespaces.forEach((namespace) => {
   const nsEndpoint = namespace.endpoint;
 
-  // over here, we're just console logging the connection for each namespace
   io.of(nsEndpoint).on('connection', (nsSocket) => {
     nsSocket.on("joinRoom", async (data, callback) => {
       const { roomTitle } = data;
@@ -61,19 +47,24 @@ namespaces.forEach((namespace) => {
       nsSocket.join(roomTitle);
 
       const socketCount = await io.of(nsEndpoint).in(roomTitle).fetchSockets();
+      const room = namespace.rooms.find((room) => room.roomTitle === roomTitle);
 
       callback({
         status: "ok",
         message: `You have joined ${roomTitle}`,
         userCount: socketCount.length,
+        history: room.history,
       });
     });
 
     nsSocket.on("newMessageToRoom", (data) => {
-      // broadcast to all sockets in the room
       const rooms = nsSocket.rooms;
       const roomTitle = [...rooms][1];
-      io.of(nsEndpoint).to(roomTitle).emit("messageToRoom", {...data, roomTitle: roomTitle});
+
+      const room = namespace.rooms.find((room) => room.roomTitle === roomTitle);
+      room.addMessage(data);
+
+      io.of(nsEndpoint).to(roomTitle).emit("messageToRoom", data);
     });
   });
 });

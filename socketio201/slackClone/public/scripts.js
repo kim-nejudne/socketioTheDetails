@@ -23,7 +23,6 @@ document.querySelector(".message-form").addEventListener("submit", (event) => {
   const userMessageElement = document.getElementById("user-message");
   const newMessage = userMessageElement.value;
   // socket.emit("newMessageToServer", { text: newMessage });
-  console.log(newMessage, selectedNsId);
 
   userMessageElement.value = "";
 
@@ -37,7 +36,6 @@ document.querySelector(".message-form").addEventListener("submit", (event) => {
 const addListeners = (nsId) => {
   if (!listeners.nsChange[nsId]) {
     nameSpaceSockets[nsId].on("nsRoomsLoad", (rooms) => {
-      console.log("rooms", rooms);
     });
 
     listeners.nsChange[nsId] = true;
@@ -45,11 +43,14 @@ const addListeners = (nsId) => {
 
   if (!listeners.messageToRoom[nsId]) {
     nameSpaceSockets[nsId].on("messageToRoom", (data) => {
-      console.log("data", data);
       // const newMessage = buildHTML(data);
       // const messages = document.querySelector(".message-history");
       // messages.innerHTML += newMessage;
       // messages.scrollTo(0, messages.scrollHeight);
+
+
+      document.querySelector("#messages").innerHTML += buildMessageHTML(data);
+
     });
 
     listeners.messageToRoom[nsId] = true;
@@ -99,13 +100,18 @@ socket.on("nsList", (nsData) => {
     });
   });
 
-  socket.on("messageToRoom", (data) => {
-    console.log("data", data);
-    // const newMessage = buildHTML(data);
-    // const messages = document.querySelector(".message-history");
-    // messages.innerHTML += newMessage;
-    // messages.scrollTo(0, messages.scrollHeight);
-  });
-
   joinNs(namespaces[lastNsId] || namespaces[0], nsData);
 });
+
+const buildMessageHTML = ({ text, date, username }) => {
+  const dateObj = new Date(date);
+  const time = dateObj.toLocaleTimeString();
+  return `
+    <li>
+      <div class="user-message">
+        <div class="user-name-time">${username} <span>${time}</span></div>
+        <div class="message-text">${text}</div>
+      </div>
+    </li>
+  `
+};

@@ -11,7 +11,28 @@ const socket = io("http://localhost:3000");
 const nameSpaceSockets = [];
 const listeners = {
   nsChange: [],
+  messageToRoom: [],
 }
+
+// global variable we can update when a user clicks on a namespace
+// we will use it to broadcast across the app
+let selectedNsId = 0;
+
+document.querySelector(".message-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const userMessageElement = document.getElementById("user-message");
+  const newMessage = userMessageElement.value;
+  // socket.emit("newMessageToServer", { text: newMessage });
+  console.log(newMessage, selectedNsId);
+
+  userMessageElement.value = "";
+
+  nameSpaceSockets[selectedNsId].emit("newMessageToRoom", {
+    text: newMessage,
+    date: Date.now(),
+    username,
+  });
+});
 
 const addListeners = (nsId) => {
   if (!listeners.nsChange[nsId]) {
@@ -20,6 +41,18 @@ const addListeners = (nsId) => {
     });
 
     listeners.nsChange[nsId] = true;
+  }
+
+  if (!listeners.messageToRoom[nsId]) {
+    nameSpaceSockets[nsId].on("messageToRoom", (data) => {
+      console.log("data", data);
+      // const newMessage = buildHTML(data);
+      // const messages = document.querySelector(".message-history");
+      // messages.innerHTML += newMessage;
+      // messages.scrollTo(0, messages.scrollHeight);
+    });
+
+    listeners.messageToRoom[nsId] = true;
   }
 }
 
@@ -64,6 +97,14 @@ socket.on("nsList", (nsData) => {
       event.preventDefault();
       joinNs(nsElement, nsData);
     });
+  });
+
+  socket.on("messageToRoom", (data) => {
+    console.log("data", data);
+    // const newMessage = buildHTML(data);
+    // const messages = document.querySelector(".message-history");
+    // messages.innerHTML += newMessage;
+    // messages.scrollTo(0, messages.scrollHeight);
   });
 
   joinNs(namespaces[lastNsId] || namespaces[0], nsData);

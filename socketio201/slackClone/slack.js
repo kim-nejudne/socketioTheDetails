@@ -52,8 +52,8 @@ namespaces.forEach((namespace) => {
       const { roomTitle } = data;
 
       // leave all rooms before joining
-      nsSocket.rooms.forEach((room, i) => {
-        if (i !== 0) {
+      [...nsSocket.rooms].forEach((room, i) => {
+        if (i > 0) {
           nsSocket.leave(room);
         }
       });
@@ -67,6 +67,13 @@ namespaces.forEach((namespace) => {
         message: `You have joined ${roomTitle}`,
         userCount: socketCount.length,
       });
+    });
+
+    nsSocket.on("newMessageToRoom", (data) => {
+      // broadcast to all sockets in the room
+      const rooms = nsSocket.rooms;
+      const roomTitle = [...rooms][1];
+      io.of(nsEndpoint).to(roomTitle).emit("messageToRoom", {...data, roomTitle: roomTitle});
     });
   });
 });
